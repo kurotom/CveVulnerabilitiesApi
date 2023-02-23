@@ -1,0 +1,55 @@
+version: '3.9'
+name: api_cve
+services:
+  app:
+    image: django_app:1.2
+    env_file:
+      - ./.env.python
+    # environment:
+    #   - keyApiSetting=${keyApiSetting}
+    #   - apiCveDb=${apiCveDb}
+    #   - userCveUser=${userCveUser}
+    #   - passCveUser=${passCveUser}
+    #   - hostApiCveDb=${hostApiCveDb}
+    #   - hostPortApiCveDb=${hostPortApiCveDb}
+    ports:
+      - 8000:8000
+    volumes:
+      - django_volume:/home/app
+    working_dir: /home/app
+    networks:
+      - appNetwork
+    depends_on:
+     - apicvedb
+
+  apicvedb:
+    image: postgres:14.7-bullseye
+    restart: always
+    env_file:
+      - ./.env.postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - dbPostgres:/var/lib/postgresql/data
+    networks:
+      - appNetwork
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - appNetwork
+    depends_on:
+      - apicvedb
+
+volumes:
+  dbPostgres:
+    external: true
+  django_volume:
+    external: true
+
+networks:
+  appNetwork:
+    name: "red_backend"

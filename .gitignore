@@ -1,0 +1,4 @@
+.env.postgres
+.env.python
+apicvedb_dump
+
