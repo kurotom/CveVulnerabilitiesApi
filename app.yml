@@ -2,7 +2,8 @@ version: '3.9'
 name: api_cve
 services:
   app:
-    image: django_app:1.2
+    #image: django_app:1.2
+    image: kurotom/python_dev:django_app-1_1
     env_file:
       - ./.env.python
     # environment:
